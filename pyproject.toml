@@ -1,0 +1,45 @@
+[project]
+name = "just-biomarkers-workspace"
+version = "0.0.0"
+description = "Workspace root for just-biomarkers, biomarkers-ui, and nanopore-pipeline"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "just-biomarkers",
+    "biomarkers-ui",
+    "nanopore-pipeline",
+    "plotly>=6.6.0",
+]
+
+[project.scripts]
+biomarkers = "just_biomarkers.cli:app"
+just-biomarkers = "just_biomarkers.cli:app"
+ui = "biomarkers_ui.cli:launch_ui"
+nanopore = "nanopore_pipeline.cli:app"
+nanopore-pipeline = "nanopore_pipeline.definitions:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["just_biomarkers_workspace"]
+
+[tool.uv]
+managed = true
+
+[tool.uv.workspace]
+members = ["just-biomarkers", "biomarkers-ui", "nanopore-pipeline"]
+
+[tool.uv.sources]
+just-biomarkers = { workspace = true }
+biomarkers-ui = { workspace = true }
+nanopore-pipeline = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "biolearn",
+    "pyarrow>=23.0.1",
+    "seaborn>=0.13.2",
+    "torch>=2.10.0",
+]
