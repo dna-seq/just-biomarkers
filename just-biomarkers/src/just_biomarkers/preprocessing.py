@@ -17,7 +17,8 @@ from typing import Callable
 import numpy as np
 import polars as pl
 
-from just_biomarkers.data_utils import get_data_dir, load_coefficients
+from just_biomarkers.coefficients import coefficient_path
+from just_biomarkers.data_utils import load_coefficients
 
 
 def _rankdata_average(a: np.ndarray) -> np.ndarray:
@@ -105,7 +106,7 @@ def _dunedin_pace_preprocess(dnam: pl.DataFrame) -> pl.DataFrame:
         Quantile-normalized matrix containing only gold-standard probes
         (≤20,000 rows), same sample columns.
     """
-    gold_path = get_data_dir() / "DunedinPACE_Gold_Means.csv"
+    gold_path = coefficient_path("DunedinPACE_Gold_Means.csv")
     gold_df = pl.read_csv(str(gold_path))
     first_col = gold_df.columns[0]
     if first_col != "CpGmarker":

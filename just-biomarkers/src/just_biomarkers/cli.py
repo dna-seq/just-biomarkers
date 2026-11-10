@@ -142,6 +142,30 @@ def _print_dataset_table(datasets: dict[str, dict[str, str]], title: str) -> Non
     console.print(table)
 
 
+@app.command("download-coefficients")
+def download_coefficients_cmd(
+    force: bool = typer.Option(
+        False,
+        "--force",
+        help="Re-download even if a verified cached copy exists.",
+    ),
+) -> None:
+    """Download every clock's coefficient file from biolearn (pinned commit, checksummed)."""
+    from just_biomarkers.coefficients import (
+        BIOLEARN_COMMIT,
+        COEFFICIENT_FILES,
+        coefficients_cache_dir,
+        download_coefficients,
+    )
+
+    console.print(
+        f"Fetching [bold]{len(COEFFICIENT_FILES)}[/bold] coefficient files from biolearn "
+        f"@ [cyan]{BIOLEARN_COMMIT[:12]}[/cyan] …"
+    )
+    paths = download_coefficients(force=force)
+    console.print(f"[green]{len(paths)} files verified in[/green] {coefficients_cache_dir()}")
+
+
 @app.command("download-example")
 def download_example(
     dataset_id: str = typer.Argument(

@@ -16,6 +16,9 @@ A [uv workspace](https://docs.astral.sh/uv/concepts/workspaces/) for methylation
 # Install all workspace packages
 uv sync --all-packages
 
+# Fetch clock coefficients from biolearn (pinned commit, checksummed; also done on first use)
+uv run biomarkers download-coefficients
+
 # List available methylation clocks
 uv run biomarkers list-clocks
 
@@ -114,6 +117,7 @@ uv run biomarkers download-example --list        # List available datasets
 uv run biomarkers download-epic                  # Download all EPIC datasets
 uv run biomarkers download-all-examples          # Download all datasets
 uv run biomarkers download-computage GSE40279    # Download ComputAgeBench dataset
+uv run biomarkers download-coefficients          # Fetch all coefficient CSVs into the cache
 uv run biomarkers compare-epic                   # Compare vs biolearn (dev dep)
 ```
 

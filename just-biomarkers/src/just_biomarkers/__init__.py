@@ -1,6 +1,12 @@
 """just-biomarkers: Polars-based methylation clock computation engine."""
 from importlib.metadata import metadata
 
+from just_biomarkers.coefficients import (
+    BIOLEARN_COMMIT,
+    COEFFICIENT_FILES,
+    coefficients_cache_dir,
+    download_coefficients,
+)
 from just_biomarkers.computage_download import (
     download_computage_dataset,
     download_computage_meta,

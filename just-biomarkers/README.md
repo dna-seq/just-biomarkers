@@ -54,6 +54,9 @@ biomarkers compute methylation_matrix.csv -o results.csv
 # Download an example GEO dataset
 biomarkers download-example GSE112618
 
+# Prefetch every clock's coefficient file (otherwise fetched on first use)
+biomarkers download-coefficients
+
 # Download all EPIC-format example datasets
 biomarkers download-epic
 
@@ -217,7 +220,7 @@ The remaining 33 clocks are **registered and computable** but have no parity tes
 
 The scoring pipeline follows these steps:
 
-1. **Load coefficients** — CpG site weights from bundled CSV files
+1. **Load coefficients** — CpG site weights from the coefficient CSVs, downloaded from biolearn on first use (see below)
 2. **Preprocess** (optional) — e.g. DunedinPACE quantile normalization against 20,000 gold-standard probe means
 3. **Join** — inner join between coefficient CpGs and input methylation matrix on `CpGmarker`
 4. **Intercept injection** — add intercept row if present in coefficients but not in input data
@@ -354,3 +357,14 @@ uv run nanopore run --headless  # In-process execution (never tested)
 ## License
 
 MIT
+
+## Coefficient files
+
+The coefficient CSVs are not in git. `just_biomarkers.coefficients` fetches them from
+[biolearn](https://github.com/bio-learn/biolearn)'s `biolearn/data/` directory at a pinned commit
+(`BIOLEARN_COMMIT`), checks each against its recorded git blob SHA-1, and caches them under
+`$BIOMARKERS_CACHE_DIR/coefficients/<commit>/` (default: the `platformdirs` user cache). A file
+missing from the cache is downloaded the first time a clock needs it; `biomarkers download-coefficients`
+fetches all 45 (about 1 MB) in advance, for offline use. A download whose checksum does not match
+raises `CoefficientChecksumError` and is not saved. A wheel that bundles the files in the package
+`data/` directory uses those instead.
